@@ -1,0 +1,29 @@
+name: Daily Financial Report
+
+on:
+  schedule:
+    - cron: '0 9 * * *'   # 09:00 UTC (adjust for your timezone)
+    - cron: '45 17 * * *' # 17:45 UTC
+  workflow_dispatch:       # Allow manual trigger
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run bot report
+        run: python src/nvidia_byd_bot.py
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
