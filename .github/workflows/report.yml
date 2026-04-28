@@ -1,4 +1,4 @@
-name: Daily Financial Report
+name: Daily Financial Report v2
 
 on:
   schedule:
