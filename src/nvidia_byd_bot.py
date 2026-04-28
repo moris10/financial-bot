@@ -190,18 +190,22 @@ async def send_telegram_message(message):
         logging.error(f"Error sending Telegram message: {e}")
 
 async def main():
-    logging.info("Starting financial bot report")
-    report = generate_report()
-    max_length = 4096
-    if len(report) <= max_length:
-        await send_telegram_message(report)
-    else:
-        parts = [report[i:i+max_length] for i in range(0, len(report), max_length)]
-        for part in parts:
-            await send_telegram_message(part)
-            import asyncio
-            await asyncio.sleep(0.5)
-    logging.info("Report sent successfully")
+    try:
+        logging.info("Starting financial bot report")
+        report = generate_report()
+        max_length = 4096
+        if len(report) <= max_length:
+            await send_telegram_message(report)
+        else:
+            parts = [report[i:i+max_length] for i in range(0, len(report), max_length)]
+            for part in parts:
+                await send_telegram_message(part)
+                import asyncio
+                await asyncio.sleep(0.5)
+        logging.info("Report sent successfully")
+    except Exception as e:
+        logging.error(f"Error in main: {e}")
+        raise
 
 if __name__ == "__main__":
     import asyncio
