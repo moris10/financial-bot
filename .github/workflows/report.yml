@@ -6,6 +6,9 @@ on:
     - cron: '45 17 * * *' # 17:45 UTC
   workflow_dispatch:       # Allow manual trigger
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   send-report:
     runs-on: ubuntu-latest
