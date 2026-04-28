@@ -1,1 +1,0 @@
-worker: python src/nvidia_byd_bot.py
