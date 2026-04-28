@@ -17,7 +17,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Constants
-STOCKS = ['TSLA', 'BYD', 'NVDA', 'AAPL', 'MSFT', 'GOOGL', 'AMZN']
+STOCKS = ['TSLA.DE', 'BYD', 'NVDA.DE', 'AAPL.DE', 'MSFT.DE', 'GOOGL.DE', 'AMZN.DE']  # Frankfurt exchange for EUR prices where available
 NEWSAPI_KEY = os.getenv('NEWSAPI_KEY')
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
@@ -101,9 +101,18 @@ def fetch_news():
         for article in articles:
             title = article['title']
             summary = article.get('description', '')
-            interpretation = "Notícia geral."
-            if 'ai' in (title + summary).lower():
-                interpretation = "Relevante para IA."
+            interpretation = "Notícia geral de mercado; impacto neutro. Conclusão: Manter posições atuais."
+            text_lower = (title + summary).lower()
+            if 'ai' in text_lower or 'artificial intelligence' in text_lower:
+                interpretation = "Relevante para setores de tecnologia como NVDA e MSFT; impacto positivo esperado devido à adoção crescente de IA. Conclusão: Aumento no valor das ações tech."
+            elif 'electric vehicle' in text_lower or 'ev' in text_lower:
+                interpretation = "Impacta indústria automotiva; oportunidades em TSLA e BYD com expansão de infraestrutura. Conclusão: Crescimento sustentável no setor EVs."
+            elif 'china' in text_lower or 'chinese' in text_lower:
+                interpretation = "Influencia mercados emergentes e commodities; monitorar impacto em BYD e economia global. Conclusão: Potencial volatilidade em ações chinesas."
+            elif 'renewable' in text_lower or 'sustainable' in text_lower:
+                interpretation = "Tendência de energia sustentável; benefícios para empresas verdes e NVDA. Conclusão: Investimento em energias limpas como oportunidade de longo prazo."
+            elif 'economy' in text_lower or 'fed' in text_lower:
+                interpretation = "Notícia econômica; impacto em todos os setores. Conclusão: Monitorar taxas de juros e inflação."
             news.append({
                 'title': title,
                 'source': article['source']['name'],
